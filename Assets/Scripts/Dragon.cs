@@ -7,7 +7,7 @@ public class Dragon : MonoBehaviour {
 	public float moveSpeed = 3f;  // dragon move speed when moving
 	public int damageAmount = 10; // probably deal a lot of damage to kill player immediately
 	public int health = 1;
-	//public string playerLayer = "Player";  // name of the layer to put enemy on when stunned
+	public int beatValue = 10;
 
 	public GameObject[] myWaypoints; // to define the movement waypoints
 
@@ -146,19 +146,18 @@ public class Dragon : MonoBehaviour {
 
 				_animator.SetBool ("Attacking", true); 
 
+				// stop to enjoy killing the player
+				_moveTime = Time.time + waitAtWaypointTime;
+
 				// apply damage to the player
 				player.ApplyDamage (damageAmount);
 
-				// stop to enjoy killing the player
-				_moveTime = Time.time * 2;
+				Invoke ("RestoreMoving", 0.1f);
+			}
 
-			}
-			else {
-				_animator.SetBool ("Attacking", false);
-				_animator.SetBool("Moving", true);
-			}
 		}
 		else if (collision.tag == "Bullet") { // hit by bullet
+			GameObject.FindGameObjectsWithTag ("Player") [0].GetComponent<CharacterController2D> ().BeatEnemyRewards (beatValue);
 			health--;
 			if (health <= 0) {
 				if (killedSFX)
@@ -172,6 +171,12 @@ public class Dragon : MonoBehaviour {
 				Destroy (GetComponent<BoxCollider2D> ()); // ignore collision with player to avoid still apply damage
 			}
 		}
+	}
+
+	void RestoreMoving() {
+		_animator.SetBool ("Attacking", false);
+		_animator.SetBool("Moving", true);
+		_moving = true;
 	}
 
 	void FallDownGround() {

@@ -217,7 +217,7 @@ public class CharacterController2D : MonoBehaviour {
 	}
 
 	// make the player jump
-	void DoJump() {
+	public void DoJump() {
 		// reset current vertical motion to 0 prior to jump
 		_vy = 0f;
 		// add a force in the up direction
@@ -292,6 +292,11 @@ public class CharacterController2D : MonoBehaviour {
 			GameManager.gm.AddPoints(amount);
 	}
 
+	public void BeatEnemyRewards(int amount) {
+		if (GameManager.gm) // add the points through the game manager, if it is available
+			GameManager.gm.AddPoints(amount);
+	}
+
 	// public function on victory over the level
 	public void Victory() {
 		PlaySound(victorySFX);
@@ -299,7 +304,7 @@ public class CharacterController2D : MonoBehaviour {
 		_animator.SetTrigger("Victory");
 
 		if (GameManager.gm) // do the game manager level compete stuff, if it is available
-			GameManager.gm.LevelCompete();
+			GameManager.gm.LevelComplete();
 	}
 
 	// public function to respawn the player at the appropriate location

@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour {
 	public float moveSpeed = 4f;  // enemy move speed when moving
 	public int damageAmount = 10; // probably deal a lot of damage to kill player immediately
 	public int health = 1;
+	public int beatValue = 5;
 
 	[Tooltip("Child gameObject for detecting stun.")]
 	public GameObject stunnedCheck; // what gameobject is the stunnedCheck
@@ -182,6 +183,7 @@ public class Enemy : MonoBehaviour {
 			}
 		}
 		else if (collision.tag == "Bullet") { // hit by bullet
+			GameObject.FindGameObjectsWithTag ("Player") [0].GetComponent<CharacterController2D> ().BeatEnemyRewards (beatValue);
 			health--;
 			if (health <= 0) {
 				if (killedSFX)
